@@ -2,7 +2,9 @@
 title: "Economic Data"
 author: "Grant Morrison"
 date: "7/1/2021"
-output: word_document
+output:
+  word_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -29,25 +31,20 @@ consumption <- read.csv("consumption_data.csv")
 
 
 
+
 ```{r}
-ggplot(data = consumption,aes(x=year, y = rpce)) +
-  geom_line(col = "navy") +
-  geom_point(col = "navyblue") +
-  geom_hline(yintercept = 0,lty = 2, col = "black") +
-  ylab("Percent Change") +
-  xlab("Year") +
-  theme_bw() +
-  ggtitle("Real Personal Consumption Expeditures 2005 - 2020")
+d1 <- 2007.5
+d2 <- 2009.5
 ```
 
 
 
-
 ```{r}
-ggplot(data = consumption,aes(x=as.factor(year), y = rpce)) +
+ggplot(data = consumption,aes(x=year, y = rpce)) +
+  geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_bar(fill = "#002776",stat="identity",width = .7) +
   geom_hline(yintercept = 0,lty = 2, col = "black") +
-  ylab("Percent Change") +
+  ylab("Percent Change from Preceding Period") +
   xlab("Year") +
   theme_bw() +
   ggtitle("Real Personal Consumption Expeditures 2005 - 2020")
@@ -58,13 +55,15 @@ ggplot(data = consumption,aes(x=as.factor(year), y = rpce)) +
 
 
 ```{r}
-ggplot(data = consumption,aes(x=as.factor(year), y = rpcend)) +
+ggplot(data = consumption,aes(x=year, y = rpcend)) +
+  geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_bar(fill = "4a9d36",stat="identity",width = .7) +
   geom_hline(yintercept = 0,lty = 2, col = "black") +
-  ylab("Percent Change") +
+  ylab("Percent Change from Preceding Period") +
   xlab("Year") +
   theme_bw() +
   ggtitle("Real Personal Consumption Expeditures: Nondurable Goods 2005 - 2020")
+
 ```
 
 
@@ -73,10 +72,11 @@ ggplot(data = consumption,aes(x=as.factor(year), y = rpcend)) +
 
 
 ```{r}
-ggplot(data = consumption,aes(x=as.factor(year), y = rpcedg)) +
+ggplot(data = consumption,aes(x=year, y = rpcedg)) +
+  geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_bar(fill = "#4a9d36",stat="identity",width = .7) +
   geom_hline(yintercept = 0,lty = 2, col = "black") +
-  ylab("Percent Change") +
+  ylab("Percent Change from Preceding Period") +
   xlab("Year") +
   theme_bw() +
   ggtitle("Real Personal Consumption Expeditures: Durable Goods 2005 - 2020")
@@ -87,10 +87,11 @@ ggplot(data = consumption,aes(x=as.factor(year), y = rpcedg)) +
 ### Real Personal Consumption Services
 
 ```{r}
-ggplot(data = consumption,aes(x=as.factor(year), y = rpces)) +
+ggplot(data = consumption,aes(x=year, y = rpces)) +
+  geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_bar(fill = "#d2492a",stat="identity",width = .7) +
   geom_hline(yintercept = 0,lty = 2, col = "black") +
-  ylab("Percent Change") +
+  ylab("Percent Change from Preceding Period") +
   xlab("Year") +
   theme_bw() +
   ggtitle("Real Personal Consumption Expeditures: Services 2005 - 2020")
@@ -109,17 +110,19 @@ dpi <- read.csv("real_disposable_income.csv")
 
 
 
+Recession dates for the charts
 ```{r}
-d <- as.Date("01/01/08", "%m/%d/%y")
-
-as.numeric(d)
-
 d1 <- as.Date("12/01/07", "%m/%d/%y")
 d2 <- as.Date("06/01/09", "%m/%d/%y")
 ```
-
 ```{r}
 dpi$DATE <- as.Date(dpi$DATE, "%m/%d/%y")
+```
+
+
+
+
+```{r}
 ggplot(data = dpi, aes(x=DATE,y=DSPIC96)) +
   geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_line(col="navy") +
@@ -127,6 +130,7 @@ ggplot(data = dpi, aes(x=DATE,y=DSPIC96)) +
   ylab("Billions of Chained 2012 Dollars") +
   xlab("Date(Monthly)") +
   ggtitle("Real Disposable Personal Income") 
+
 ```
 
 
@@ -140,9 +144,11 @@ unemployment <- read.csv("unemployment.csv")
 ```
 
 
-
 ```{r}
 unemployment$DATE <- as.Date(unemployment$DATE, "%Y-%m-%d")
+```
+
+```{r}
 ggplot(data = unemployment, aes(x=DATE,y=UNRATE)) +
   geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_line(col="navy") +
@@ -165,10 +171,13 @@ ggplot(data = unemployment, aes(x=DATE,y=UNRATE)) +
 real_gdp <- read.csv("real_gdp.csv")
 ```
 
+```{r}
+real_gdp$DATE <- as.Date(real_gdp$DATE, "%Y-%m-%d")
+```
+
 
 
 ```{r}
-real_gdp$DATE <- as.Date(real_gdp$DATE, "%Y-%m-%d")
 ggplot(data = real_gdp, aes(x=DATE,y=GDPC1)) +
   geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_line(col="navy") +
@@ -190,9 +199,12 @@ ggplot(data = real_gdp, aes(x=DATE,y=GDPC1)) +
 debt_gdp <- read.csv("debt_to_gdp.csv")
 ```
 
-
 ```{r}
 debt_gdp$DATE <- as.Date(debt_gdp$DATE, "%Y-%m-%d")
+```
+
+
+```{r}
 ggplot(data = debt_gdp, aes(x=DATE,y=GFDEGDQ188S)) +
   geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_line(col="navy") +
@@ -202,7 +214,7 @@ ggplot(data = debt_gdp, aes(x=DATE,y=GFDEGDQ188S)) +
   ggtitle("Total Public Debt as a Percent of Gross Domestic Product") 
 ```
 
-
+### Personal Savings Rate
 
 ```{r}
 personal_savings <- read.csv("personal_savings_rate.csv")
@@ -211,6 +223,10 @@ personal_savings <- read.csv("personal_savings_rate.csv")
 
 ```{r}
 personal_savings$DATE <- as.Date(personal_savings$DATE, "%Y-%m-%d")
+```
+
+
+```{r}
 ggplot(data = personal_savings, aes(x=DATE,y=PSAVERT)) +
   geom_rect(aes(xmin = d1,xmax=d2,ymin=-Inf,ymax=Inf), alpha = .3, fill ="lightgrey") +
   geom_line(col="navy") +
